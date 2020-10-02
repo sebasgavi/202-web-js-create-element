@@ -1,0 +1,21 @@
+.product {
+  border-bottom: 1px solid gray;
+  display: flex;
+  padding: 10px 0px;
+
+  &__img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    padding: 10px;
+    margin-right: 20px;
+    border: 1px solid gray;
+    border-radius: 5px;
+  }
+  &__title {
+    margin-top: 0px;
+  }
+  &__price {
+
+  }
+}

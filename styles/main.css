@@ -1,0 +1,23 @@
+.product {
+  border-bottom: 1px solid gray;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 10px 0px;
+}
+
+.product__img {
+  width: 60px;
+  height: 60px;
+  -o-object-fit: contain;
+     object-fit: contain;
+  padding: 10px;
+  margin-right: 20px;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.product__title {
+  margin-top: 0px;
+}
+/*# sourceMappingURL=main.css.map */
