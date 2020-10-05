@@ -26,6 +26,7 @@ const productsList = document.querySelector('.productslist');
 
 // creación de nuevos productos a partir de la lista
 function renderProducts (list) {
+  productsList.innerHTML = '';
   list.forEach(function (elem) {
     const newProduct = document.createElement('article');
     newProduct.classList.add('product');
@@ -49,8 +50,6 @@ renderProducts(products);
 
 const filterBtn = document.querySelector('.filterbtn');
 filterBtn.addEventListener('click', function () {
-  productsList.innerHTML = '';
-
   // función slice para tomar una sección de la lista
   // const filtered = products.slice(1, 3);
 
@@ -65,4 +64,22 @@ filterBtn.addEventListener('click', function () {
 
   // render solo con los productos filtrados
   renderProducts(filtered);
+});
+
+
+
+
+const form = document.querySelector('.form');
+form.addEventListener('submit', function (event) {
+  event.preventDefault();
+
+  const newProduct = {
+    title: form.title.value,
+    img: form.image.value,
+    price: form.price.value
+  };
+
+  products.push(newProduct);
+
+  renderProducts(products);
 });

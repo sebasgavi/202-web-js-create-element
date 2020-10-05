@@ -19,3 +19,25 @@
 
   }
 }
+
+
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 30px;
+  margin-top: 30px;
+
+  &__title {
+    margin-top: 0;
+  }
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+}
