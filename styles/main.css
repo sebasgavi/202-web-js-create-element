@@ -21,6 +21,11 @@
   margin-top: 0px;
 }
 
+.margin {
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
 .form {
   display: -webkit-box;
   display: -ms-flexbox;

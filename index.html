@@ -12,25 +12,25 @@
 
   </aside>
 
-  <section class="productslist">
+  <section class="productslist margin">
   </section>
 
   <button class="filterbtn">filtrar</button>
 
-  <form class="form">
+  <form class="form form__margin">
     <h2 class="form__title">Nuevo producto</h2>
 
-    <label class="form__label">
+    <label class="form__label margin">
       Título
       <input name="title" type="text">
     </label>
 
-    <label class="form__label">
+    <label class="form__label margin">
       Imagen
       <input name="image" type="url">
     </label>
 
-    <label class="form__label">
+    <label class="form__label margin">
       Precio
       <input name="price" type="number">
     </label>
@@ -40,6 +40,9 @@
     </button>
   </form>
 
+
+  <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-firestore.js"></script>
   <script src="./scripts/main.js"></script>
 
 </body>
