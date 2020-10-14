@@ -1,42 +1,21 @@
-var firebaseConfig = {
-  apiKey: "AIzaSyCmSHBNjZ1NJWKvM-TzvF5BI5IN26ZXJJg",
-  authDomain: "web-js-project.firebaseapp.com",
-  databaseURL: "https://web-js-project.firebaseio.com",
-  projectId: "web-js-project",
-  storageBucket: "web-js-project.appspot.com",
-  messagingSenderId: "998843852384",
-  appId: "1:998843852384:web:1c882d575c8a2c84f68505",
-  measurementId: "G-DKERXLDK2M"
+const firebaseConfig = {
+  apiKey: "AIzaSyABSM3yPqLYkseMXsaZgr_SHH0orx6e1Y4",
+  authDomain: "web-store-9e79a.firebaseapp.com",
+  databaseURL: "https://web-store-9e79a.firebaseio.com",
+  projectId: "web-store-9e79a",
+  storageBucket: "web-store-9e79a.appspot.com",
+  messagingSenderId: "475442757560",
+  appId: "1:475442757560:web:6ef789930a0edbac70994d"
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-var db = firebase.firestore();
-
-const products = [
-  {
-    title: 'Celular Motorola Moto One Macro',
-    img: 'https://http2.mlstatic.com/D_NQ_NP_671655-MCO43438392203_092020-V.webp',
-    price: 499900,
-  },
-  {
-    title: 'Celular Motorola One Action Color Blanco',
-    img: 'https://http2.mlstatic.com/D_NQ_NP_760318-MCO42908273986_072020-V.webp',
-    price: 679900,
-  },
-  {
-    title: 'Celular Motorola Moto G8 Plus 64gb',
-    img: 'https://http2.mlstatic.com/D_NQ_NP_846737-MCO43497294331_092020-V.webp',
-    price: 649900,
-  },
-  {
-    title: 'Motorola Moto G8 Power 4g',
-    img: 'https://http2.mlstatic.com/D_NQ_NP_725226-MCO42143648422_062020-V.webp',
-    price: 699900,
-  },
-];
+const db = firebase.firestore();
+const productsRef = db.collection('products');
 
 const productsList = document.querySelector('.productslist');
+
+const loader = document.querySelector('.loader');
 
 
 // creación de nuevos productos a partir de la lista
@@ -45,7 +24,7 @@ function renderProducts (list) {
   list.forEach(function (elem) {
     const newProduct = document.createElement('article');
     newProduct.classList.add('product');
-  
+
     newProduct.innerHTML = `
     <img class="product__img" src="${elem.img}" alt="">
     <div class="product__info">
@@ -55,17 +34,41 @@ function renderProducts (list) {
       <button class="product__edit">Editar</button>
     </div>
     `;
-  
+
+    // seleccionamos el botón "Eliminar" que se acaba de crear en este elemento
+    const deleteBtn = newProduct.querySelector('.product__delete');
+    deleteBtn.addEventListener('click',function(){
+      loader.classList.add('loader--show');
+      productsRef // referencia de la colección
+      .doc(elem.id) // referencia de un documento específico en esa colección
+      .delete() // elimine el documento asociado a esa referencia
+      .then(function() {
+        // debería entrar si todo sale bien
+        console.log("Document successfully deleted!");
+        getProducts(); // traiga los productos cuando estemos seguros de que ya eliminó el que le dijimos
+      })
+      .catch(function(error) {
+        // debería entrar si ocurre algún error
+        console.error("Error removing document: ", error);
+      });
+    });
+
+    // seleccionar el botón de editar
+    // al hacer click al botón de editar
+    const editBtn = newProduct.querySelector('.product__edit');
+    editBtn.addEventListener('click', function() {
+      form.title.value = elem.title;
+    });
+
     productsList.appendChild(newProduct);
   });
-  deleteProducts();
-  updateProducts();
 }
 
-var objects = [];
 function getProducts(){
-  db.collection("products").get().then((querySnapshot) => {
-    objects.splice(0,objects.length);
+  productsRef  // referencia de la colección
+  .get() // pide todos los documentos de la colección
+  .then((querySnapshot) => {
+    const objects = [];
     querySnapshot.forEach((doc) => {
         const obj = doc.data();
         obj.id = doc.id;
@@ -73,32 +76,12 @@ function getProducts(){
         console.log(`${doc.id} => ${doc.data()}`);
     });
     renderProducts(objects);
+    loader.classList.remove('loader--show');
   });
 }
 
-getProducts();
 // render inicial con todos los productos
-//renderProducts(products);
-
-
-const filterBtn = document.querySelector('.filterbtn');
-filterBtn.addEventListener('click', function () {
-  // función slice para tomar una sección de la lista
-  // const filtered = products.slice(1, 3);
-
-  // función filter para filtrar con una condición específica
-  const filtered = products.filter(function (elem) {
-    if(elem.price > 650000) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-
-  // render solo con los productos filtrados
-  renderProducts(filtered);
-});
-
+getProducts();
 
 
 //Aqui es donde agregamos un producto
@@ -112,47 +95,14 @@ form.addEventListener('submit', function (event) {
     price: form.price.value
   };
 
-  db.collection("products").add(newProduct)
+  loader.classList.add('loader--show');
+  productsRef // referencia de la colección
+  .add(newProduct) // cree un nuevo elemento en la colección
   .then(function(docRef) {
       console.log("Document written with ID: ", docRef.id);
+      getProducts();
   })
   .catch(function(error) {
       console.error("Error adding document: ", error);
   });
-
-  //products.push(newProduct);
-
-  getProducts();
-  //renderProducts(products);
 });
-
-function deleteProducts(){
-  var deleteBtns = document.querySelectorAll('.product__delete');
-  deleteBtns.forEach(function (btn,index){
-    btn.addEventListener('click',function(){
-
-      db.collection("products").doc(objects[index].id).delete().then(function() {
-        getProducts();
-        console.log("Document successfully deleted!");
-      }).catch(function(error) {
-          console.error("Error removing document: ", error);
-      });
-
-    });
-  });
-}
-
-function updateProducts(){
-  /*db.collection("cities").doc("LA").set({
-    name: "Los Angeles",
-    state: "CA",
-    country: "USA"
-  })
-  .then(function() {
-      console.log("Document successfully written!");
-  })
-  .catch(function(error) {
-      console.error("Error writing document: ", error);
-  });*/
-}
-

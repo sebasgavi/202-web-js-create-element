@@ -55,4 +55,12 @@
           flex-direction: column;
   margin-bottom: 20px;
 }
+
+.loader {
+  display: none;
+}
+
+.loader--show {
+  display: block;
+}
 /*# sourceMappingURL=main.css.map */
