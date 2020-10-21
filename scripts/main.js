@@ -17,6 +17,7 @@ const productsList = document.querySelector('.productslist');
 
 const loader = document.querySelector('.loader');
 
+let selectedItem = null;
 
 // creación de nuevos productos a partir de la lista
 function renderProducts (list) {
@@ -58,6 +59,9 @@ function renderProducts (list) {
     const editBtn = newProduct.querySelector('.product__edit');
     editBtn.addEventListener('click', function() {
       form.title.value = elem.title;
+      form.image.value = elem.img;
+      form.price.value = elem.price;
+      selectedItem = elem;
     });
 
     productsList.appendChild(newProduct);
@@ -89,20 +93,58 @@ const form = document.querySelector('.form');
 form.addEventListener('submit', function (event) {
   event.preventDefault();
 
+  console.log();
+ 
+  var storageRef = firebase.storage().ref();
+
+  // Create a reference to 'mountains.jpg'
+  var newImageRef = storageRef.child(`products/${Math.floor(Math.random()*123152194192)}.jpg`);
+
+  var file = form.imageFile.files[0]; // use the Blob or File API
+  newImageRef.put(file).then(function(snapshot) {
+    console.log(snapshot)
+    console.log('Uploaded a blob or file!');
+  });
+ 
+
+
+  return;
+
   const newProduct = {
     title: form.title.value,
     img: form.image.value,
-    price: form.price.value
+    price: form.price.value,
+    color: form.color2.value
   };
 
   loader.classList.add('loader--show');
-  productsRef // referencia de la colección
-  .add(newProduct) // cree un nuevo elemento en la colección
-  .then(function(docRef) {
-      console.log("Document written with ID: ", docRef.id);
-      getProducts();
-  })
-  .catch(function(error) {
-      console.error("Error adding document: ", error);
-  });
+
+  function handleThen (docRef) {
+    // console.log("Document written with ID: ", docRef.id);
+    getProducts();
+    form.title.value = '';
+    form.image.value = '';
+    form.price.value = '';
+    selectedItem = null;
+  }
+
+  function handleCatch (error) {
+    console.error("Error adding document: ", error);
+  }
+
+  if(selectedItem) {
+    // si existe selectedItem quiere decir que va a editar
+    productsRef
+    .doc(selectedItem.id) // seleccione el documento con ese id
+    .set(newProduct) // sobreescriba la información existente
+    .then(handleThen)
+    .catch(handleCatch);
+
+  } else {
+    // si no existe es porque es un nuevo producto
+    productsRef // referencia de la colección
+    .add(newProduct) // cree un nuevo elemento en la colección
+    .then(handleThen)
+    .catch(handleCatch);
+  }
 });
