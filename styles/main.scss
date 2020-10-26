@@ -44,6 +44,11 @@
     flex-direction: column;
     margin-bottom: 20px;
   }
+
+  &__error {
+    color: red;
+    font-weight: 600;
+  }
 }
 
 
@@ -53,4 +58,9 @@
   &--show {
     display: block;
   }
+}
+
+
+.hidden {
+  display: none;
 }

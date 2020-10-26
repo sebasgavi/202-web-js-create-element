@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./styles/main.css">
+</head>
+<body>
+
+  <form class="form register">
+    <h2 class="form__title">Registro</h2>
+
+    <label class="form__label">
+      Nombre
+      <input required type="text" name="firstname" />
+    </label>
+
+    <label class="form__label">
+      Apellido
+      <input required type="text" name="lastname" />
+    </label>
+
+    <label class="form__label">
+      Celular
+      <input required type="text" name="phone" />
+    </label>
+
+    <label class="form__label">
+      Correo
+      <input required type="email" name="email" />
+    </label>
+
+    <label class="form__label">
+      Contraseña
+      <input required type="password" name="password" />
+    </label>
+
+    <p class="form__error hidden">
+      Ya existe un usuario registrado con este correo.
+    </p>
+
+    <button type="submit">
+      Registrarme
+    </button>
+  </form>
+
+
+  <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-auth.js"></script>
+  <script src="./scripts/firebase.js"></script>
+  <script src="./scripts/register.js"></script>
+
+</body>
+</html>

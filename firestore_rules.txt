@@ -1,0 +1,16 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // permitir leer la colección products a cualquier cliente
+    match /products/{documents=**} {
+    	allow read;
+    }
+    
+    // permitir leer y escribir su propia información solo al usuario autenticado
+    match /users/{userId}/{documents=**} {
+    	allow read: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null && request.auth.uid == userId;
+      allow create: if true;
+    }
+  }
+}
