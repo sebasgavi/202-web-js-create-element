@@ -7,6 +7,8 @@ const loader = document.querySelector('.loader');
 
 let selectedItem = null;
 
+var storageRef = firebase.storage().ref();
+
 // creación de nuevos productos a partir de la lista
 function renderProducts (list) {
   productsList.innerHTML = '';
@@ -26,6 +28,18 @@ function renderProducts (list) {
       <button class="product__edit">Editar</button>
     </div>
     `;
+
+    if(elem.storageImgs) {
+      elem.storageImgs.forEach(function(imageRef) {
+        storageRef.child(imageRef).getDownloadURL().then(function(url) {
+          // Or inserted into an <img> element:
+          var img = newProduct.querySelector('img');
+          img.src = url;
+        }).catch(function(error) {
+          // Handle any errors
+        });
+      })
+    }
 
     // seleccionamos el botón "Eliminar" que se acaba de crear en este elemento
     const deleteBtn = newProduct.querySelector('.product__delete');
@@ -78,27 +92,19 @@ function getProducts(){
 // render inicial con todos los productos
 getProducts();
 
+var imagePaths = [];
+
 
 //Aqui es donde agregamos un producto
 const form = document.querySelector('.form');
 form.addEventListener('submit', function (event) {
   event.preventDefault();
- 
-  var storageRef = firebase.storage().ref();
-
-  // Create a reference to 'mountains.jpg'
-  var newImageRef = storageRef.child(`products/${Math.floor(Math.random()*123152194192)}.jpg`);
-
-  var file = form.imageFile.files[0]; // use the Blob or File API
-  newImageRef.put(file).then(function(snapshot) {
-    console.log(snapshot)
-    console.log('Uploaded a blob or file!');
-  });
 
   const newProduct = {
     title: form.title.value,
     img: form.image.value,
     price: form.price.value,
+    storageImgs: imagePaths,
   };
 
   loader.classList.add('loader--show');
@@ -131,4 +137,30 @@ form.addEventListener('submit', function (event) {
     .then(handleThen)
     .catch(handleCatch);
   }
+});
+
+
+const images = form.querySelectorAll('.form__imginput');
+images.forEach(function(group, index) {
+  const input = group.querySelector('input');
+  const img = group.querySelector('img');
+  input.addEventListener('change', function () {
+  
+    // Create a reference to 'mountains.jpg'
+    var newImageRef = storageRef.child(`products/${Math.floor(Math.random()*999999999)}.jpg`);
+  
+    var file = input.files[0]; // use the Blob or File API
+  
+    var reader = new FileReader();
+    reader.readAsDataURL(file); // convert to base64 string
+    reader.onload = function(e) {
+      img.src = e.target.result;
+    }
+  
+    newImageRef.put(file).then(function(snapshot) {
+      console.log(snapshot)
+      console.log('Uploaded a blob or file!');
+      imagePaths[index] = snapshot.metadata.fullPath;
+    });
+  });
 });
