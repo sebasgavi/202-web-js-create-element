@@ -4,6 +4,7 @@ service cloud.firestore {
     // permitir leer la colección products a cualquier cliente
     match /products/{documents=**} {
     	allow read;
+      allow create: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.admin == true;
     }
     
     // permitir leer y escribir su propia información solo al usuario autenticado

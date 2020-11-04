@@ -24,8 +24,8 @@ function renderProducts (list) {
     <div class="product__info">
       <h3 class="product__title">${elem.title}</h3>
       <p class="product__price">$ ${elem.price}</p>
-      <button class="product__delete">Eliminar</button>
-      <button class="product__edit">Editar</button>
+      <button class="product__delete hidden showadmin">Eliminar</button>
+      <button class="product__edit hidden showadmin">Editar</button>
     </div>
     `;
 
@@ -69,6 +69,11 @@ function renderProducts (list) {
       selectedItem = elem;
     });
 
+    if(userInfo && userInfo.admin) {
+      deleteBtn.classList.remove('hidden');
+      editBtn.classList.remove('hidden');
+    }
+
     productsList.appendChild(newProduct);
   });
 }
@@ -93,7 +98,6 @@ function getProducts(){
 getProducts();
 
 var imagePaths = [];
-
 
 //Aqui es donde agregamos un producto
 const form = document.querySelector('.form');

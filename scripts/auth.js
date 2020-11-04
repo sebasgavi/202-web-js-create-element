@@ -5,6 +5,8 @@ const authWithout = auth.querySelector('.auth__without');
 const authProfileSpan = auth.querySelector('.auth__profile span');
 const authSignout = auth.querySelector('.auth__signout');
 
+var userInfo;
+
 firebase.auth().onAuthStateChanged(function(user) {
   if(user) {
     // si el usuario existe quiere decir que inició sesión, se registró o ya tenía sesión iniciada
@@ -16,7 +18,15 @@ firebase.auth().onAuthStateChanged(function(user) {
     usersRef.doc(user.uid).get().then(function (doc) {
       if(doc.exists) {
         const data = doc.data();
+        userInfo = data;
         authProfileSpan.innerText = data.firstname;
+
+        if(data.admin) {
+          const showAdmin = document.querySelectorAll('.showadmin');
+          showAdmin.forEach(function(elem) {
+            elem.classList.remove('hidden');
+          });
+        }
       }
     });
   } else {
