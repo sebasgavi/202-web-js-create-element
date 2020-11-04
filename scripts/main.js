@@ -139,7 +139,7 @@ form.addEventListener('submit', function (event) {
   }
 });
 
-
+// input file single, repeated
 const images = form.querySelectorAll('.form__imginput');
 images.forEach(function(group, index) {
   const input = group.querySelector('input');
@@ -163,4 +163,23 @@ images.forEach(function(group, index) {
       imagePaths[index] = snapshot.metadata.fullPath;
     });
   });
+});
+
+
+
+// input file multiple
+const fileMulti = document.querySelector('.filemulti');
+fileMulti.addEventListener('change', function() {
+
+  Array.from(fileMulti.files).forEach(function(file, index) {
+
+    console.log(file);
+    var newImageRef = storageRef.child(`products/${Math.floor(Math.random()*999999999)}.jpg`);
+
+    newImageRef.put(file).then(function(snapshot) {
+      console.log(snapshot)
+      console.log('Uploaded a blob or file!');
+      imagePaths[index] = snapshot.metadata.fullPath;
+    });
+  })
 });
