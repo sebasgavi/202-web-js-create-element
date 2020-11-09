@@ -29,7 +29,40 @@
   <p class="loader">Cargando...</p>
 
   <aside>
+    <form class="filterform">
+      <label>
+        Ordenar por:
+        <select name="order">
+          <option value="">Selecciona una opción</option>
+          <option value="price_asc">Precio menor a mayor</option>
+          <option value="price_desc">Precio mayor a menor</option>
+        </select>
+      </label>
 
+      <h4>Filtrar por nombre:</h4>
+      <label>
+        <input type="radio" name="name" value="" checked>
+        Todos
+      </label>
+      <label>
+        <input type="radio" name="name" value="pariatur">
+        Pariatur
+      </label>
+      <label>
+        <input type="radio" name="name" value="sunt">
+        Sunt
+      </label>
+      <label>
+        <input type="radio" name="name" value="edit">
+        Edit
+      </label>
+
+      <br>
+      <label>
+        Productos menores a:
+        <input type="number" name="price">
+      </label>
+    </form>
   </aside>
 
   <section class="productslist margin">

@@ -1,7 +1,10 @@
 .product {
   border-bottom: 1px solid gray;
-  display: flex;
   padding: 10px 0px;
+
+  a {
+    display: flex;
+  }
 
   &__img {
     width: 60px;

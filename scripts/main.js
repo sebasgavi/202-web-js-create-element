@@ -13,17 +13,21 @@ var storageRef = firebase.storage().ref();
 function renderProducts (list) {
   productsList.innerHTML = '';
   list.forEach(function (elem) {
-    const newProduct = document.createElement('a');
+    const newProduct = document.createElement('div');
     newProduct.classList.add('product');
 
     const url = `producto.html?${elem.id}-${elem.title}`;
-    newProduct.setAttribute('href', url);
+    // newProduct.setAttribute('href', url);
 
     newProduct.innerHTML = `
-    <img class="product__img" src="${elem.img}" alt="">
-    <div class="product__info">
-      <h3 class="product__title">${elem.title}</h3>
-      <p class="product__price">$ ${elem.price}</p>
+    <a href="${url}">
+      <img class="product__img" src="${elem.img}" alt="">
+      <div class="product__info">
+        <h3 class="product__title">${elem.title}</h3>
+        <p class="product__price">$ ${elem.price}</p>
+      </div>
+    </a>
+    <div>
       <button class="product__delete hidden showadmin">Eliminar</button>
       <button class="product__edit hidden showadmin">Editar</button>
     </div>
@@ -78,18 +82,20 @@ function renderProducts (list) {
   });
 }
 
+
+let objectsList = [];
 function getProducts(){
   productsRef  // referencia de la colección
   .get() // pide todos los documentos de la colección
   .then((querySnapshot) => {
-    const objects = [];
+    objectsList = [];
     querySnapshot.forEach((doc) => {
         const obj = doc.data();
         obj.id = doc.id;
-        objects.push(obj);
+        objectsList.push(obj);
         console.log(`${doc.id} => ${doc.data()}`);
     });
-    renderProducts(objects);
+    renderProducts(objectsList);
     loader.classList.remove('loader--show');
   });
 }
@@ -186,4 +192,48 @@ fileMulti.addEventListener('change', function() {
       imagePaths[index] = snapshot.metadata.fullPath;
     });
   })
+});
+
+
+
+
+const filterForm = document.querySelector('.filterform');
+filterForm.addEventListener('input', function() {
+
+  let copy = objectsList.slice();
+
+  const order = filterForm.order.value;
+  switch(order){
+    case 'price_asc':
+      copy.sort(function(a, b){
+        return a.price - b.price;
+      });
+      break;
+    case 'price_desc':
+      copy.sort(function(a, b){
+        return b.price - a.price;
+      });
+      break;
+  }
+
+  const nameFilter = filterForm.name.value;
+  if(nameFilter != '') {
+    copy = copy.filter(function(elem){
+      if(elem.title.toLowerCase().includes(nameFilter)) {
+        return true;
+      }
+      return false;
+    });
+  }
+
+  const price = filterForm.price.value;
+  if(price) {
+    copy = copy.filter(function(elem) {
+      if(elem.price < parseInt(price)) {
+        return true;
+      }
+    });
+  }
+
+  renderProducts(copy);
 });

@@ -16,6 +16,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     const db = firebase.firestore();
     const usersRef = db.collection('users');
     usersRef.doc(user.uid).get().then(function (doc) {
+      console.log(user.uid)
       if(doc.exists) {
         const data = doc.data();
         userInfo = data;
