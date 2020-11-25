@@ -67,3 +67,17 @@
 .hidden {
   display: none;
 }
+
+
+.cart {
+  position: fixed;
+  top: 100px;
+  right: 300px;
+  overflow: hidden;
+  padding: 20px 150px 20px 50px;
+
+  &__icon {
+    width: 100px;
+    height: auto;
+  }
+}

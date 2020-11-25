@@ -166,6 +166,8 @@ images.forEach(function(group, index) {
     reader.onload = function(e) {
       img.src = e.target.result;
     }
+
+    console.log(file)
   
     newImageRef.put(file).then(function(snapshot) {
       console.log(snapshot)

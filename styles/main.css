@@ -75,4 +75,17 @@
 .hidden {
   display: none;
 }
+
+.cart {
+  position: fixed;
+  top: 100px;
+  right: 300px;
+  overflow: hidden;
+  padding: 20px 150px 20px 50px;
+}
+
+.cart__icon {
+  width: 100px;
+  height: auto;
+}
 /*# sourceMappingURL=main.css.map */
